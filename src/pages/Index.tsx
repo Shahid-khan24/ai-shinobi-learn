@@ -2,7 +2,6 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import SubjectGrid from "@/components/SubjectGrid";
 import Dashboard from "@/components/Dashboard";
-import QuizInterface from "@/components/QuizInterface";
 
 const Index = () => {
   return (
@@ -11,7 +10,6 @@ const Index = () => {
       <Hero />
       <SubjectGrid />
       <Dashboard />
-      <QuizInterface />
     </div>
   );
 };

@@ -1,30 +1,125 @@
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { 
-  TrendingUp, 
   Target, 
   Flame, 
   Trophy, 
   Brain,
-  Clock,
   Calendar,
-  BarChart3
+  Award,
+  Loader2
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const stats = [
-  { label: "Current Streak", value: "12 days", icon: Flame, color: "text-orange-500" },
-  { label: "Total Score", value: "8,547", icon: Trophy, color: "text-yellow-500" },
-  { label: "Quizzes Completed", value: "127", icon: Target, color: "text-green-500" },
-  { label: "Study Time", value: "24.5h", icon: Clock, color: "text-blue-500" }
-];
+interface UserStats {
+  current_streak: number;
+  total_score: number;
+  total_quizzes: number;
+}
 
-const recentActivity = [
-  { subject: "Computer Science", score: 94, difficulty: "Hard", time: "2 hours ago" },
-  { subject: "Mathematics", score: 87, difficulty: "Medium", time: "1 day ago" },
-  { subject: "Physics", score: 92, difficulty: "Hard", time: "2 days ago" },
-  { subject: "Chemistry", score: 78, difficulty: "Medium", time: "3 days ago" }
-];
+interface Achievement {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  earned_at: string;
+}
 
 const Dashboard = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [stats, setStats] = useState<UserStats | null>(null);
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        // Fetch user stats
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('current_streak, total_score, total_quizzes')
+          .eq('user_id', user.id)
+          .single();
+
+        if (profileData) {
+          setStats(profileData);
+        }
+
+        // Fetch recent achievements
+        const { data: achievementsData } = await supabase
+          .from('user_achievements')
+          .select('*, achievements(*)')
+          .eq('user_id', user.id)
+          .order('earned_at', { ascending: false })
+          .limit(3);
+
+        if (achievementsData) {
+          setAchievements(achievementsData.map(ua => ({
+            ...ua.achievements,
+            earned_at: ua.earned_at
+          })));
+        }
+
+        // Fetch recent quiz attempts
+        const { data: attemptsData } = await supabase
+          .from('quiz_attempts')
+          .select('*, quizzes(difficulty, quiz_topics(name))')
+          .eq('user_id', user.id)
+          .order('completed_at', { ascending: false })
+          .limit(4);
+
+        if (attemptsData) {
+          setRecentActivity(attemptsData);
+        }
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
+  if (loading) {
+    return (
+      <section id="dashboard" className="py-20 relative">
+        <div className="container mx-auto px-4 flex justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </section>
+    );
+  }
+
+  if (!user) {
+    return (
+      <section id="dashboard" className="py-20 relative">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-muted-foreground mb-4">Sign in to track your progress</p>
+          <Button variant="hero" onClick={() => navigate('/auth')}>
+            Sign In
+          </Button>
+        </div>
+      </section>
+    );
+  }
+
+  const statsDisplay = [
+    { label: "Current Streak", value: `${stats?.current_streak || 0} days`, icon: Flame, color: "text-orange-500" },
+    { label: "Total Score", value: stats?.total_score || 0, icon: Trophy, color: "text-yellow-500" },
+    { label: "Quizzes Completed", value: stats?.total_quizzes || 0, icon: Target, color: "text-green-500" },
+    { label: "Achievements", value: achievements.length, icon: Award, color: "text-purple-500" }
+  ];
+
   return (
     <section id="dashboard" className="py-20 relative">
       <div className="container mx-auto px-4">
@@ -39,7 +134,7 @@ const Dashboard = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12 max-w-6xl mx-auto">
-          {stats.map((stat, index) => {
+          {statsDisplay.map((stat, index) => {
             const IconComponent = stat.icon;
             return (
               <div key={index} className="card-glow p-6 rounded-xl text-center">
@@ -52,32 +147,33 @@ const Dashboard = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {/* Performance Chart */}
+          {/* Achievements */}
           <div className="card-glow p-6 rounded-xl">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-primary" />
-                Weekly Performance
+                <Award className="w-5 h-5 text-primary" />
+                Recent Achievements
               </h3>
-              <Button variant="ninja" size="sm">View Details</Button>
             </div>
             
             <div className="space-y-4">
-              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, index) => {
-                const height = Math.random() * 60 + 20;
-                return (
-                  <div key={day} className="flex items-center gap-3">
-                    <span className="text-sm text-muted-foreground w-8">{day}</span>
-                    <div className="flex-1 bg-muted/20 rounded-full h-2">
-                      <div 
-                        className="bg-gradient-to-r from-primary to-accent h-full rounded-full transition-all duration-500"
-                        style={{ width: `${height}%` }}
-                      ></div>
+              {achievements.length === 0 ? (
+                <p className="text-muted-foreground text-center py-8">
+                  Complete quizzes to earn achievements!
+                </p>
+              ) : (
+                achievements.map((achievement) => (
+                  <div key={achievement.id} className="flex items-center gap-4 p-3 rounded-lg bg-muted/10">
+                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                      <Trophy className="w-6 h-6 text-primary" />
                     </div>
-                    <span className="text-sm font-medium">{Math.round(height)}%</span>
+                    <div className="flex-1">
+                      <div className="font-semibold">{achievement.name}</div>
+                      <div className="text-sm text-muted-foreground">{achievement.description}</div>
+                    </div>
                   </div>
-                );
-              })}
+                ))
+              )}
             </div>
           </div>
 
@@ -88,33 +184,42 @@ const Dashboard = () => {
                 <Calendar className="w-5 h-5 text-primary" />
                 Recent Activity
               </h3>
-              <Button variant="ninja" size="sm">View All</Button>
             </div>
 
             <div className="space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/10 hover:bg-muted/20 transition-colors">
-                  <div>
-                    <div className="font-medium">{activity.subject}</div>
-                    <div className="text-sm text-muted-foreground flex items-center gap-2">
-                      <span>{activity.difficulty}</span>
-                      <span>•</span>
-                      <span>{activity.time}</span>
+              {recentActivity.length === 0 ? (
+                <p className="text-muted-foreground text-center py-8">
+                  Start a quiz to see your activity!
+                </p>
+              ) : (
+                recentActivity.map((activity, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/10 hover:bg-muted/20 transition-colors">
+                    <div>
+                      <div className="font-medium">{activity.quizzes?.quiz_topics?.name}</div>
+                      <div className="text-sm text-muted-foreground flex items-center gap-2">
+                        <span className="capitalize">{activity.quizzes?.difficulty}</span>
+                        <span>•</span>
+                        <span>{new Date(activity.completed_at).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-lg font-bold text-primary">
+                        {Math.round((activity.score / activity.total_questions) * 100)}%
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {activity.score}/{activity.total_questions}
+                      </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-lg font-bold text-primary">{activity.score}%</div>
-                    <div className="text-xs text-muted-foreground">Score</div>
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>
 
         {/* CTA */}
         <div className="text-center mt-12">
-          <Button variant="hero" size="lg">
+          <Button variant="hero" size="lg" onClick={() => navigate('/#subjects')}>
             <Brain className="w-5 h-5" />
             Continue Learning
           </Button>

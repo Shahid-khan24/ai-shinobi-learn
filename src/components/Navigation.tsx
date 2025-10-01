@@ -17,18 +17,18 @@ const Navigation = () => {
         </Link>
         
         <div className="hidden md:flex items-center gap-6">
-          <a href="#home" className="text-muted-foreground hover:text-primary transition-colors">
-            <Home className="w-5 h-5" />
-          </a>
-          <a href="#dashboard" className="text-muted-foreground hover:text-primary transition-colors">
-            <TrendingUp className="w-5 h-5" />
-          </a>
-          <a href="#quiz" className="text-muted-foreground hover:text-primary transition-colors">
-            <Brain className="w-5 h-5" />
-          </a>
-          <a href="#settings" className="text-muted-foreground hover:text-primary transition-colors">
-            <Settings className="w-5 h-5" />
-          </a>
+          <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
+            Home
+          </Link>
+          <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
+            Dashboard
+          </Link>
+          <Link to="/quiz-history" className="text-sm font-medium hover:text-primary transition-colors">
+            History
+          </Link>
+          <Link to="/leaderboard" className="text-sm font-medium hover:text-primary transition-colors">
+            Leaderboard
+          </Link>
         </div>
 
         <div className="flex items-center gap-4">

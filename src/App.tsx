@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import QuizSelection from "./pages/QuizSelection";
 import Quiz from "./pages/Quiz";
+import QuizHistory from "./pages/QuizHistory";
+import Leaderboard from "./pages/Leaderboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,8 +24,11 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/dashboard" element={<Index />} />
             <Route path="/quiz-selection/:topic" element={<QuizSelection />} />
             <Route path="/quiz/:quizId" element={<Quiz />} />
+            <Route path="/quiz-history" element={<QuizHistory />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

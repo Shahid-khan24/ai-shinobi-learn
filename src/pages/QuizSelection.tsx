@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
-import { Brain, Loader2 } from "lucide-react";
+import { Brain, Loader2, PenLine } from "lucide-react";
 
 const difficulties = [
   { value: 'beginner', label: 'Beginner', description: 'Get started with the basics' },
@@ -19,10 +21,20 @@ const QuizSelection = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [selectedDifficulty, setSelectedDifficulty] = useState('');
+  const [customTopic, setCustomTopic] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleStartQuiz = async () => {
-    if (!selectedDifficulty || !topic) return;
+    const finalTopic = customTopic.trim() || topic;
+    
+    if (!selectedDifficulty || !finalTopic) {
+      toast({
+        title: "Missing Information",
+        description: "Please select a difficulty and topic",
+        variant: "destructive"
+      });
+      return;
+    }
 
     if (!user) {
       toast({
@@ -39,7 +51,7 @@ const QuizSelection = () => {
     try {
       const { data, error } = await supabase.functions.invoke('generate-quiz', {
         body: { 
-          topic: topic,
+          topic: finalTopic,
           difficulty: selectedDifficulty 
         }
       });
@@ -78,10 +90,29 @@ const QuizSelection = () => {
               <span className="text-sm text-muted-foreground capitalize">{topic}</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Choose Your <span className="text-gradient">Difficulty</span>
+              Customize Your <span className="text-gradient">Quiz</span>
             </h1>
             <p className="text-xl text-muted-foreground">
-              Select a difficulty level to start your personalized quiz
+              Specify your topic and select a difficulty level
+            </p>
+          </div>
+
+          {/* Custom Topic Input */}
+          <div className="mb-8 p-6 rounded-xl bg-muted/10 border-2 border-primary/20">
+            <Label htmlFor="customTopic" className="flex items-center gap-2 text-lg font-semibold mb-3">
+              <PenLine className="w-5 h-5 text-primary" />
+              Specific Topic (Optional)
+            </Label>
+            <Input
+              id="customTopic"
+              type="text"
+              placeholder={`e.g., "Islamic Prophets", "Tamil Grammar", "Shakespeare's plays"...`}
+              value={customTopic}
+              onChange={(e) => setCustomTopic(e.target.value)}
+              className="text-base"
+            />
+            <p className="text-sm text-muted-foreground mt-2">
+              Leave blank to use the general subject "{topic}", or specify a more focused topic
             </p>
           </div>
 

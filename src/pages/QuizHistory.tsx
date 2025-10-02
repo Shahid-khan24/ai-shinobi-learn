@@ -70,6 +70,27 @@ const QuizHistory = () => {
     };
 
     fetchHistory();
+
+    // Subscribe to real-time updates for this user's quiz attempts
+    const channel = supabase
+      .channel('quiz-attempts-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'quiz_attempts',
+          filter: `user_id=eq.${user.id}`
+        },
+        () => {
+          fetchHistory();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user, navigate]);
 
   const getScoreColor = (score: number, total: number) => {

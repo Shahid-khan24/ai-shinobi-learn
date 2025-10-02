@@ -38,6 +38,26 @@ const Leaderboard = () => {
     };
 
     fetchLeaderboard();
+
+    // Subscribe to real-time updates
+    const channel = supabase
+      .channel('leaderboard-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'profiles'
+        },
+        () => {
+          fetchLeaderboard();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const getMedalIcon = (position: number) => {

@@ -36,32 +36,41 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button variant="hero" size="lg" className="group">
+            <Button 
+              variant="hero" 
+              size="lg" 
+              className="group"
+              onClick={() => document.getElementById('subjects')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               Start Learning Now
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button variant="ninja" size="lg">
+            <Button 
+              variant="ninja" 
+              size="lg"
+              onClick={() => window.open('https://youtube.com/@lovable', '_blank')}
+            >
               View Demo
             </Button>
           </div>
 
           {/* Feature Cards */}
           <div className="grid md:grid-cols-3 gap-6 mt-16">
-            <div className="card-glow p-6 rounded-xl">
+            <div className="card-glow p-6 rounded-xl animate-fade-in hover:scale-105 transition-transform" style={{ animationDelay: '0ms' }}>
               <Brain className="w-12 h-12 text-primary mb-4 mx-auto" />
               <h3 className="text-lg font-semibold mb-2">AI-Generated Quizzes</h3>
               <p className="text-muted-foreground text-sm">
                 Dynamic questions tailored to your learning level and progress
               </p>
             </div>
-            <div className="card-glow p-6 rounded-xl">
+            <div className="card-glow p-6 rounded-xl animate-fade-in hover:scale-105 transition-transform" style={{ animationDelay: '100ms' }}>
               <Target className="w-12 h-12 text-primary mb-4 mx-auto" />
               <h3 className="text-lg font-semibold mb-2">Smart Explanations</h3>
               <p className="text-muted-foreground text-sm">
                 Step-by-step AI explanations for deeper understanding
               </p>
             </div>
-            <div className="card-glow p-6 rounded-xl">
+            <div className="card-glow p-6 rounded-xl animate-fade-in hover:scale-105 transition-transform" style={{ animationDelay: '200ms' }}>
               <Zap className="w-12 h-12 text-primary mb-4 mx-auto" />
               <h3 className="text-lg font-semibold mb-2">Adaptive Learning</h3>
               <p className="text-muted-foreground text-sm">

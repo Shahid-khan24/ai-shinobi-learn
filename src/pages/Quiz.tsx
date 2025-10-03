@@ -12,8 +12,10 @@ import {
   Brain,
   ArrowRight,
   RotateCcw,
-  Loader2
+  Loader2,
+  Home
 } from "lucide-react";
+import ShareScore from "@/components/ShareScore";
 
 interface Question {
   question: string;
@@ -36,6 +38,7 @@ const Quiz = () => {
   const [userAnswers, setUserAnswers] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [score, setScore] = useState(0);
+  const [quizCompleted, setQuizCompleted] = useState(false);
 
   useEffect(() => {
     if (!quizId) return;
@@ -113,12 +116,12 @@ const Quiz = () => {
 
       if (error) throw error;
 
+      setQuizCompleted(true);
+
       toast({
         title: "Quiz Completed!",
         description: `You scored ${score} out of ${questions.length}!`,
       });
-
-      navigate('/');
     } catch (error) {
       console.error('Error saving quiz attempt:', error);
       toast({
@@ -143,6 +146,47 @@ const Quiz = () => {
         <div className="text-center">
           <p className="text-lg text-muted-foreground">Quiz not found</p>
           <Button onClick={() => navigate('/')} className="mt-4">Go Home</Button>
+        </div>
+      </div>
+    );
+  }
+
+  // Show completion screen
+  if (quizCompleted) {
+    const percentage = Math.round((score / questions.length) * 100);
+    return (
+      <div className="min-h-screen bg-background py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto text-center">
+            <div className="card-glow p-12 rounded-xl animate-scale-in">
+              <Brain className="w-20 h-20 text-primary mx-auto mb-6" />
+              <h2 className="text-4xl font-bold mb-4">
+                Quiz <span className="text-gradient">Completed!</span>
+              </h2>
+              <div className="text-6xl font-bold text-gradient my-8">
+                {score}/{questions.length}
+              </div>
+              <p className="text-2xl text-muted-foreground mb-8">
+                You scored {percentage}%
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <ShareScore 
+                  score={score}
+                  totalQuestions={questions.length}
+                  subject={quiz.quiz_topics?.name || "Quiz"}
+                />
+                <Button 
+                  variant="hero" 
+                  size="lg"
+                  onClick={() => navigate('/')}
+                >
+                  <Home className="w-5 h-5" />
+                  Go Home
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -213,7 +257,8 @@ const Quiz = () => {
                   <Button
                     key={index}
                     variant={buttonClass as any}
-                    className="w-full justify-start text-left p-6 h-auto"
+                    className="w-full justify-start text-left p-6 h-auto animate-fade-in hover:scale-102 transition-transform"
+                    style={{ animationDelay: `${index * 50}ms` }}
                     onClick={() => handleAnswerSelect(index)}
                     disabled={showExplanation}
                   >

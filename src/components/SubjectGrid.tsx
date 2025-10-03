@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight, Loader2 } from "lucide-react";
 import * as Icons from "lucide-react";
+import SubtopicSelection from "./SubtopicSelection";
 
 interface Subject {
   id: string;
@@ -16,6 +17,7 @@ const SubjectGrid = () => {
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSubjects = async () => {
@@ -37,7 +39,7 @@ const SubjectGrid = () => {
   }, []);
 
   const handleSubjectClick = (topicName: string) => {
-    navigate(`/quiz-selection/${topicName}`);
+    setSelectedSubject(topicName);
   };
 
   if (loading) {
@@ -63,12 +65,16 @@ const SubjectGrid = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {subjects.map((subject) => {
+          {subjects.map((subject, index) => {
             const iconName = subject.icon as keyof typeof Icons;
             const IconComponent: any = Icons[iconName] || Icons.BookOpen;
             
             return (
-              <div key={subject.id} className="subject-card group">
+              <div 
+                key={subject.id} 
+                className="subject-card group animate-fade-in"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-primary to-accent flex items-center justify-center">
                     <IconComponent className="w-6 h-6 text-white" />
@@ -96,6 +102,12 @@ const SubjectGrid = () => {
           })}
         </div>
       </div>
+
+      <SubtopicSelection 
+        subject={selectedSubject || ""}
+        isOpen={!!selectedSubject}
+        onClose={() => setSelectedSubject(null)}
+      />
     </section>
   );
 };

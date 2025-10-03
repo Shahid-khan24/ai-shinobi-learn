@@ -117,15 +117,16 @@ const QuizSelection = () => {
           </div>
 
           <div className="space-y-4 mb-8">
-            {difficulties.map((difficulty) => (
+            {difficulties.map((difficulty, index) => (
               <button
                 key={difficulty.value}
                 onClick={() => setSelectedDifficulty(difficulty.value)}
-                className={`w-full p-6 rounded-xl text-left transition-all ${
+                className={`w-full p-6 rounded-xl text-left transition-all animate-fade-in ${
                   selectedDifficulty === difficulty.value
-                    ? 'bg-primary/20 border-2 border-primary'
-                    : 'bg-muted/10 border-2 border-transparent hover:border-primary/50'
+                    ? 'bg-primary/20 border-2 border-primary scale-105'
+                    : 'bg-muted/10 border-2 border-transparent hover:border-primary/50 hover:scale-102'
                 }`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
                 <h3 className="text-xl font-semibold mb-2">{difficulty.label}</h3>
                 <p className="text-muted-foreground">{difficulty.description}</p>

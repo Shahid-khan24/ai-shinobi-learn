@@ -11,6 +11,32 @@ interface SubtopicSelectionProps {
 }
 
 const subtopicsBySubject: Record<string, string[]> = {
+  "Islam": [
+    "Quran",
+    "Hadiths",
+    "Mixed"
+  ],
+  "Tamil": [
+    "Grammar",
+    "Poetry",
+    "Stories"
+  ],
+  "English": [
+    "Grammar",
+    "Literature",
+    "Writing",
+    "Vocabulary",
+    "Comprehension",
+    "Speaking"
+  ],
+  "Computer Science": [
+    "Programming Basics",
+    "Data Structures",
+    "Algorithms",
+    "Web Development",
+    "Database Systems",
+    "Operating Systems"
+  ],
   "Mathematics": [
     "Algebra",
     "Geometry",
@@ -58,14 +84,6 @@ const subtopicsBySubject: Record<string, string[]> = {
     "Japanese",
     "Chinese",
     "Grammar & Vocabulary"
-  ],
-  "Religion": [
-    "Islam",
-    "Christianity",
-    "Buddhism",
-    "Hinduism",
-    "Comparative Religion",
-    "Religious History"
   ]
 };
 

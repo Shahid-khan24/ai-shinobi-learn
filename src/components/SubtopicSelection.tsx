@@ -22,8 +22,8 @@ const subtopicsBySubject: Record<string, string[]> = {
     "Stories"
   ],
   "English": [
-    "Grammar",
-    "Literature",
+    "English Grammar",
+    "English Literature",
     "Writing",
     "Vocabulary",
     "Comprehension",
@@ -77,13 +77,13 @@ const subtopicsBySubject: Record<string, string[]> = {
     "Creative Writing",
     "Literary Analysis"
   ],
-  "Languages": [
-    "Spanish",
-    "French",
-    "German",
-    "Japanese",
-    "Chinese",
-    "Grammar & Vocabulary"
+  "Geography": [
+    "World Geography",
+    "Physical Geography",
+    "Human Geography",
+    "Climate & Weather",
+    "Cartography",
+    "Cultural Geography"
   ]
 };
 
@@ -110,7 +110,7 @@ const SubtopicSelection = ({ subject, isOpen, onClose }: SubtopicSelectionProps)
             <Button
               key={subtopic}
               variant="ninja"
-              className="h-auto p-4 justify-start animate-fade-in"
+              className="h-auto p-4 justify-start animate-ninja-appear hover-scale"
               style={{ animationDelay: `${index * 50}ms` }}
               onClick={() => handleSubtopicSelect(subtopic)}
             >

@@ -158,8 +158,8 @@ const Quiz = () => {
       <div className="min-h-screen bg-background py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center">
-            <div className="card-glow p-12 rounded-xl animate-scale-in">
-              <Brain className="w-20 h-20 text-primary mx-auto mb-6" />
+            <div className="card-glow p-12 rounded-xl animate-ninja-appear chakra-glow">
+              <Brain className="w-20 h-20 text-primary mx-auto mb-6 rasengan-effect" />
               <h2 className="text-4xl font-bold mb-4">
                 Quiz <span className="text-gradient">Completed!</span>
               </h2>
@@ -257,7 +257,7 @@ const Quiz = () => {
                   <Button
                     key={index}
                     variant={buttonClass as any}
-                    className="w-full justify-start text-left p-6 h-auto animate-fade-in hover:scale-102 transition-transform"
+                    className="w-full justify-start text-left p-6 h-auto animate-kunai-throw hover-scale-102"
                     style={{ animationDelay: `${index * 50}ms` }}
                     onClick={() => handleAnswerSelect(index)}
                     disabled={showExplanation}
@@ -277,7 +277,7 @@ const Quiz = () => {
 
           {/* AI Explanation */}
           {showExplanation && (
-            <div className="card-glow p-6 rounded-xl mb-8 border-l-4 border-primary animate-fade-in">
+            <div className="card-glow p-6 rounded-xl mb-8 border-l-4 border-primary animate-ninja-appear chakra-glow">
               <div className="flex items-start gap-3">
                 <Lightbulb className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
                 <div>

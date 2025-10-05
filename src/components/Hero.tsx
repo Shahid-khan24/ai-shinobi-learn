@@ -56,21 +56,21 @@ const Hero = () => {
 
           {/* Feature Cards */}
           <div className="grid md:grid-cols-3 gap-6 mt-16">
-            <div className="card-glow p-6 rounded-xl animate-fade-in hover:scale-105 transition-transform" style={{ animationDelay: '0ms' }}>
-              <Brain className="w-12 h-12 text-primary mb-4 mx-auto" />
+            <div className="card-glow p-6 rounded-xl animate-ninja-appear ninja-hover" style={{ animationDelay: '0ms' }}>
+              <Brain className="w-12 h-12 text-primary mb-4 mx-auto rasengan-effect" />
               <h3 className="text-lg font-semibold mb-2">AI-Generated Quizzes</h3>
               <p className="text-muted-foreground text-sm">
                 Dynamic questions tailored to your learning level and progress
               </p>
             </div>
-            <div className="card-glow p-6 rounded-xl animate-fade-in hover:scale-105 transition-transform" style={{ animationDelay: '100ms' }}>
-              <Target className="w-12 h-12 text-primary mb-4 mx-auto" />
+            <div className="card-glow p-6 rounded-xl animate-ninja-appear ninja-hover" style={{ animationDelay: '100ms' }}>
+              <Target className="w-12 h-12 text-primary mb-4 mx-auto shuriken-rotate" />
               <h3 className="text-lg font-semibold mb-2">Smart Explanations</h3>
               <p className="text-muted-foreground text-sm">
                 Step-by-step AI explanations for deeper understanding
               </p>
             </div>
-            <div className="card-glow p-6 rounded-xl animate-fade-in hover:scale-105 transition-transform" style={{ animationDelay: '200ms' }}>
+            <div className="card-glow p-6 rounded-xl animate-ninja-appear ninja-hover chakra-glow" style={{ animationDelay: '200ms' }}>
               <Zap className="w-12 h-12 text-primary mb-4 mx-auto" />
               <h3 className="text-lg font-semibold mb-2">Adaptive Learning</h3>
               <p className="text-muted-foreground text-sm">

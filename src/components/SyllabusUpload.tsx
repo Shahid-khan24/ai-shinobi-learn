@@ -208,10 +208,11 @@ const SyllabusUpload = () => {
               </div>
             ) : (
               <div className="space-y-2">
-                {syllabusList.map((syllabus) => (
+                {syllabusList.map((syllabus, index) => (
                   <div
                     key={syllabus.id}
-                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/5 hover:bg-muted/10 transition-colors"
+                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/5 hover:bg-muted/10 transition-colors animate-ninja-appear hover-scale"
+                    style={{ animationDelay: `${index * 50}ms` }}
                   >
                     <div className="flex items-center gap-3 flex-1">
                       <FileText className="w-5 h-5 text-primary" />

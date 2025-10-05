@@ -72,7 +72,7 @@ const SubjectGrid = () => {
             return (
               <div 
                 key={subject.id} 
-                className="subject-card group animate-fade-in"
+                className="subject-card group animate-ninja-appear"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="flex items-start justify-between mb-4">

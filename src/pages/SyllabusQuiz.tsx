@@ -168,7 +168,7 @@ const SyllabusQuiz = () => {
               </div>
               <div className="space-y-3">
                 {topics.map((topic, index) => (
-                  <div key={index} className="p-4 rounded-lg bg-background/50 border">
+                  <div key={index} className="p-4 rounded-lg bg-background/50 border animate-ninja-appear hover-scale" style={{ animationDelay: `${index * 50}ms` }}>
                     <div className="flex items-start gap-3">
                       <Checkbox
                         id={`topic-${index}`}
@@ -202,10 +202,10 @@ const SyllabusQuiz = () => {
               <button
                 key={difficulty.value}
                 onClick={() => setSelectedDifficulty(difficulty.value)}
-                className={`w-full p-6 rounded-xl text-left transition-all animate-fade-in ${
+                className={`w-full p-6 rounded-xl text-left transition-all animate-ninja-appear hover-scale ${
                   selectedDifficulty === difficulty.value
-                    ? 'bg-primary/20 border-2 border-primary scale-105'
-                    : 'bg-muted/10 border-2 border-transparent hover:border-primary/50 hover:scale-102'
+                    ? 'bg-primary/20 border-2 border-primary scale-105 chakra-glow'
+                    : 'bg-muted/10 border-2 border-transparent hover:border-primary/50'
                 }`}
                 style={{ animationDelay: `${index * 100}ms` }}
               >

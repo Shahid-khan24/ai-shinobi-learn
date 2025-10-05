@@ -194,4 +194,57 @@ All colors MUST be HSL for consistency.
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  /* Ninja Animation Effects */
+  .ninja-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-lg;
+  }
+
+  .chakra-glow {
+    box-shadow: 0 0 15px hsl(180 100% 50% / 0.4), 0 0 30px hsl(259 94% 51% / 0.2);
+    animation: chakra-pulse 2s ease-in-out infinite;
+  }
+
+  .shuriken-rotate {
+    animation: shuriken-spin 2s linear infinite;
+  }
+
+  .kunai-animation {
+    animation: kunai-throw 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  }
+
+  .shadow-clone-effect {
+    animation: shadow-clone 0.5s ease-in-out;
+  }
+
+  .rasengan-effect {
+    animation: rasengan-spin 3s ease-in-out infinite;
+  }
+
+  /* Interactive Elements */
+  .story-link {
+    @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
+  }
+
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105;
+  }
+
+  .hover-scale-102 {
+    @apply transition-transform duration-200 hover:scale-[1.02];
+  }
+
+  /* Pulse Animation */
+  .pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
 }

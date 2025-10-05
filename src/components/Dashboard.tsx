@@ -137,8 +137,8 @@ const Dashboard = () => {
           {statsDisplay.map((stat, index) => {
             const IconComponent = stat.icon;
             return (
-              <div key={index} className="card-glow p-6 rounded-xl text-center">
-                <IconComponent className={`w-8 h-8 ${stat.color} mx-auto mb-3`} />
+              <div key={index} className="card-glow p-6 rounded-xl text-center animate-ninja-appear ninja-hover" style={{ animationDelay: `${index * 100}ms` }}>
+                <IconComponent className={`w-8 h-8 ${stat.color} mx-auto mb-3 rasengan-effect`} />
                 <div className="text-2xl font-bold mb-1">{stat.value}</div>
                 <div className="text-sm text-muted-foreground">{stat.label}</div>
               </div>
@@ -148,10 +148,10 @@ const Dashboard = () => {
 
         <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Achievements */}
-          <div className="card-glow p-6 rounded-xl">
+          <div className="card-glow p-6 rounded-xl animate-ninja-appear" style={{ animationDelay: '200ms' }}>
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold flex items-center gap-2">
-                <Award className="w-5 h-5 text-primary" />
+                <Award className="w-5 h-5 text-primary shuriken-rotate" />
                 Recent Achievements
               </h3>
             </div>
@@ -163,9 +163,9 @@ const Dashboard = () => {
                 </p>
               ) : (
                 achievements.map((achievement) => (
-                  <div key={achievement.id} className="flex items-center gap-4 p-3 rounded-lg bg-muted/10">
+                  <div key={achievement.id} className="flex items-center gap-4 p-3 rounded-lg bg-muted/10 animate-ninja-appear hover-scale chakra-glow">
                     <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                      <Trophy className="w-6 h-6 text-primary" />
+                      <Trophy className="w-6 h-6 text-primary rasengan-effect" />
                     </div>
                     <div className="flex-1">
                       <div className="font-semibold">{achievement.name}</div>
@@ -178,7 +178,7 @@ const Dashboard = () => {
           </div>
 
           {/* Recent Activity */}
-          <div className="card-glow p-6 rounded-xl">
+          <div className="card-glow p-6 rounded-xl animate-ninja-appear" style={{ animationDelay: '300ms' }}>
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-primary" />
@@ -193,7 +193,7 @@ const Dashboard = () => {
                 </p>
               ) : (
                 recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/10 hover:bg-muted/20 transition-colors">
+                  <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/10 hover:bg-muted/20 transition-colors animate-kunai-throw hover-scale" style={{ animationDelay: `${index * 50}ms` }}>
                     <div>
                       <div className="font-medium">{activity.quizzes?.quiz_topics?.name}</div>
                       <div className="text-sm text-muted-foreground flex items-center gap-2">

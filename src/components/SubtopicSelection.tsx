@@ -92,7 +92,8 @@ const SubtopicSelection = ({ subject, isOpen, onClose }: SubtopicSelectionProps)
   const subtopics = subtopicsBySubject[subject] || [];
 
   const handleSubtopicSelect = (subtopic: string) => {
-    navigate(`/quiz-selection/${subtopic}`);
+    // Ensure we pass the full, user-friendly topic string through the URL
+    navigate(`/quiz-selection/${encodeURIComponent(subtopic)}`);
     onClose();
   };
 

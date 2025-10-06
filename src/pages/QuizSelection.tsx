@@ -7,7 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
-import { Brain, Loader2, PenLine } from "lucide-react";
+import { Brain, PenLine } from "lucide-react";
+import LoadingSharingan from "@/components/LoadingSharingan";
 
 const difficulties = [
   { value: 'beginner', label: 'Beginner', description: 'Get started with the basics' },
@@ -25,7 +26,7 @@ const QuizSelection = () => {
   const [loading, setLoading] = useState(false);
 
   const handleStartQuiz = async () => {
-    const finalTopic = customTopic.trim() || topic;
+    const finalTopic = (customTopic.trim() || topic || "").toString();
     
     if (!selectedDifficulty || !finalTopic) {
       toast({
@@ -51,7 +52,7 @@ const QuizSelection = () => {
     try {
       const { data, error } = await supabase.functions.invoke('generate-quiz', {
         body: { 
-          topic: finalTopic,
+          topic: decodeURIComponent(finalTopic),
           difficulty: selectedDifficulty 
         }
       });
@@ -143,7 +144,7 @@ const QuizSelection = () => {
           >
             {loading ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <span className="mr-2 inline-flex"><LoadingSharingan size={20} /></span>
                 Generating Quiz...
               </>
             ) : (

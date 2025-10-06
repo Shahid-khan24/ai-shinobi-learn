@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import * as Icons from "lucide-react";
 import SubtopicSelection from "./SubtopicSelection";
+import LoadingSharingan from "./LoadingSharingan";
 
 interface Subject {
   id: string;
@@ -27,7 +28,12 @@ const SubjectGrid = () => {
           .select('*');
 
         if (error) throw error;
-        setSubjects(data || []);
+        const SUBJECT_NAMES = [
+          'Islam', 'Tamil', 'English', 'Computer Science', 'Mathematics',
+          'Science', 'Technology', 'History', 'Literature', 'Geography'
+        ];
+        const filtered = (data || []).filter((s) => SUBJECT_NAMES.includes(s.name));
+        setSubjects(filtered);
       } catch (error) {
         console.error('Error fetching subjects:', error);
       } finally {
@@ -45,8 +51,9 @@ const SubjectGrid = () => {
   if (loading) {
     return (
       <section id="subjects" className="py-20 relative">
-        <div className="container mx-auto px-4 flex justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <div className="container mx-auto px-4 flex flex-col items-center gap-4">
+          <LoadingSharingan size={72} />
+          <p className="text-muted-foreground">Loading subjects...</p>
         </div>
       </section>
     );

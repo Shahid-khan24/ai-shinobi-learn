@@ -114,18 +114,34 @@ Requirements:
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // Ensure topic exists (create if missing)
+    let topicId: string | null = null;
     const { data: topicData, error: topicError } = await supabase
       .from('quiz_topics')
       .select('id')
       .eq('name', topic)
-      .single();
+      .maybeSingle();
 
-    if (topicError && topicError.code !== 'PGRST116') {
+    if (topicError) {
       console.error('Error fetching topic:', topicError);
       throw topicError;
     }
 
-    const topicId = topicData?.id;
+    if (topicData?.id) {
+      topicId = topicData.id;
+    } else {
+      const { data: newTopic, error: createTopicError } = await supabase
+        .from('quiz_topics')
+        .insert({ name: topic, icon: 'BookOpen', description: `Auto-created topic for ${topic}` })
+        .select('id')
+        .single();
+      if (createTopicError) {
+        console.error('Error creating topic:', createTopicError);
+        throw createTopicError;
+      }
+      topicId = newTopic.id;
+    }
+
     if (!topicId) {
       throw new Error('Topic not found');
     }

@@ -6,42 +6,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { Upload, FileText, Loader2, Trash2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-
-interface Syllabus {
-  id: string;
-  title: string;
-  file_name: string;
-  created_at: string;
-}
+import { FileText, Loader2 } from "lucide-react";
 
 const SyllabusUpload = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
   const [uploading, setUploading] = useState(false);
-  const [syllabusList, setSyllabusList] = useState<Syllabus[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  const fetchSyllabusList = async () => {
-    if (!user) return;
-    
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from('syllabus')
-        .select('id, title, file_name, created_at')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setSyllabusList(data || []);
-    } catch (error) {
-      console.error('Error fetching syllabus:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -100,7 +70,8 @@ const SyllabusUpload = () => {
         description: "Syllabus uploaded and processed successfully",
       });
 
-      await fetchSyllabusList();
+      // Reload the page to show the new syllabus in the section below
+      window.location.reload();
     } catch (error: any) {
       console.error('Error uploading syllabus:', error);
       toast({
@@ -114,48 +85,15 @@ const SyllabusUpload = () => {
     }
   };
 
-  const handleDelete = async (syllabusId: string, filePath: string) => {
-    try {
-      const { error: deleteError } = await supabase
-        .from('syllabus')
-        .delete()
-        .eq('id', syllabusId);
-
-      if (deleteError) throw deleteError;
-
-      await supabase.storage
-        .from('syllabus-files')
-        .remove([filePath]);
-
-      toast({
-        title: "Deleted",
-        description: "Syllabus deleted successfully",
-      });
-
-      await fetchSyllabusList();
-    } catch (error) {
-      console.error('Error deleting syllabus:', error);
-      toast({
-        title: "Error",
-        description: "Failed to delete syllabus",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleSelectSyllabus = (syllabusId: string) => {
-    navigate(`/syllabus-quiz/${syllabusId}`);
-  };
-
   return (
-    <Card className="w-full">
+    <Card className="w-full card-glow">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <FileText className="w-5 h-5" />
+          <FileText className="w-5 h-5 text-primary" />
           Upload Your Syllabus
         </CardTitle>
         <CardDescription>
-          Upload your syllabus (PDF, DOCX, TXT) and generate quizzes from specific topics
+          Upload your course syllabus (PDF, DOCX, TXT) to generate personalized quizzes
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -170,7 +108,12 @@ const SyllabusUpload = () => {
               disabled={uploading || !user}
               className="flex-1"
             />
-            {uploading && <Loader2 className="w-5 h-5 animate-spin text-primary" />}
+            {uploading && (
+              <div className="flex items-center gap-2">
+                <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                <span className="text-sm text-muted-foreground">Processing...</span>
+              </div>
+            )}
           </div>
           <p className="text-sm text-muted-foreground">
             Supported formats: PDF, DOCX, DOC, TXT (Max 10MB)
@@ -178,71 +121,10 @@ const SyllabusUpload = () => {
         </div>
 
         {!user && (
-          <p className="text-sm text-amber-600">
-            Please sign in to upload syllabus files
-          </p>
-        )}
-
-        {user && (
-          <div className="mt-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold">Your Syllabus Files</h3>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={fetchSyllabusList}
-                disabled={loading}
-              >
-                {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Refresh"}
-              </Button>
-            </div>
-
-            {loading ? (
-              <div className="flex justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-primary" />
-              </div>
-            ) : syllabusList.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <Upload className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                <p>No syllabus files uploaded yet</p>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {syllabusList.map((syllabus, index) => (
-                  <div
-                    key={syllabus.id}
-                    className="flex items-center justify-between p-3 rounded-lg border bg-muted/5 hover:bg-muted/10 transition-colors animate-ninja-appear hover-scale"
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    <div className="flex items-center gap-3 flex-1">
-                      <FileText className="w-5 h-5 text-primary" />
-                      <div className="flex-1">
-                        <p className="font-medium">{syllabus.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {new Date(syllabus.created_at).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="ninja"
-                        size="sm"
-                        onClick={() => handleSelectSyllabus(syllabus.id)}
-                      >
-                        Generate Quiz
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDelete(syllabus.id, syllabus.file_name)}
-                      >
-                        <Trash2 className="w-4 h-4 text-destructive" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+          <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/20">
+            <p className="text-sm text-amber-600 dark:text-amber-500">
+              Please sign in to upload syllabus files
+            </p>
           </div>
         )}
       </CardContent>

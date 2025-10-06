@@ -32,7 +32,10 @@ const SubjectGrid = () => {
           'Islam', 'Tamil', 'English', 'Computer Science', 'Mathematics',
           'Science', 'Technology', 'History', 'Literature', 'Geography'
         ];
-        const filtered = (data || []).filter((s) => SUBJECT_NAMES.includes(s.name));
+        // Filter out syllabus topics and only show main subjects
+        const filtered = (data || []).filter((s) => 
+          SUBJECT_NAMES.includes(s.name) && !s.name.startsWith('Syllabus:')
+        );
         setSubjects(filtered);
       } catch (error) {
         console.error('Error fetching subjects:', error);

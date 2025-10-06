@@ -46,7 +46,9 @@ serve(async (req) => {
             role: 'user',
             content: `Generate 5 multiple-choice quiz questions about "${topic}" at "${difficulty}" difficulty level.
             
-Return ONLY a JSON array of questions in this exact format:
+Return ONLY a valid JSON array of questions. Do NOT use markdown code blocks. Do NOT include any explanatory text before or after the JSON.
+
+Return in this exact format:
 [
   {
     "question": "What is...",
@@ -56,11 +58,14 @@ Return ONLY a JSON array of questions in this exact format:
   }
 ]
 
-Requirements:
-- Make questions challenging and educational
+CRITICAL Requirements:
+- Return ONLY the JSON array, nothing else
+- NO markdown code blocks (no \`\`\`json)
+- NO special characters or LaTeX formulas in questions (use plain text)
+- Make questions challenging and educational for ${difficulty} level
 - Ensure options are plausible distractors
-- correctAnswer is the index (0-3) of the correct option
-- Provide clear, educational explanations`
+- correctAnswer must be the index (0-3) of the correct option
+- Provide clear, educational explanations in plain English`
           }
         ],
       }),
@@ -84,7 +89,10 @@ Requirements:
         );
       }
 
-      throw new Error(`AI API error: ${aiResponse.status}`);
+      return new Response(
+        JSON.stringify({ error: `AI API error: ${aiResponse.status} - ${errorText}` }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     const aiData = await aiResponse.json();
@@ -95,13 +103,27 @@ Requirements:
     // Parse the JSON response
     let questions;
     try {
+      // Clean the response - remove markdown code blocks and trim whitespace
+      let cleanedContent = generatedContent.trim();
+      
       // Try to extract JSON from markdown code blocks if present
-      const jsonMatch = generatedContent.match(/```(?:json)?\s*(\[[\s\S]*?\])\s*```/);
-      const jsonString = jsonMatch ? jsonMatch[1] : generatedContent;
-      questions = JSON.parse(jsonString);
+      const jsonMatch = cleanedContent.match(/```(?:json)?\s*(\[[\s\S]*?\])\s*```/);
+      if (jsonMatch && jsonMatch[1]) {
+        cleanedContent = jsonMatch[1].trim();
+      }
+      
+      // Remove any remaining backticks
+      cleanedContent = cleanedContent.replace(/^`+|`+$/g, '');
+      
+      console.log('Cleaned content for parsing:', cleanedContent.substring(0, 200));
+      questions = JSON.parse(cleanedContent);
     } catch (parseError) {
       console.error('Failed to parse AI response:', parseError);
-      throw new Error('Failed to parse quiz questions from AI response');
+      console.error('Original content:', generatedContent);
+      return new Response(
+        JSON.stringify({ error: 'Failed to parse quiz questions. Please try again.' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     // Validate the questions
@@ -124,26 +146,39 @@ Requirements:
 
     if (topicError) {
       console.error('Error fetching topic:', topicError);
-      throw topicError;
+      return new Response(
+        JSON.stringify({ error: `Database error: ${topicError.message}` }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     if (topicData?.id) {
       topicId = topicData.id;
+      console.log('Using existing topic:', topicId);
     } else {
+      console.log('Creating new topic:', topic);
       const { data: newTopic, error: createTopicError } = await supabase
         .from('quiz_topics')
-        .insert({ name: topic, icon: 'BookOpen', description: `Auto-created topic for ${topic}` })
+        .insert({ name: topic, icon: 'BookOpen', description: `Learn about ${topic}` })
         .select('id')
         .single();
+      
       if (createTopicError) {
         console.error('Error creating topic:', createTopicError);
-        throw createTopicError;
+        return new Response(
+          JSON.stringify({ error: `Failed to create topic: ${createTopicError.message}` }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
       }
       topicId = newTopic.id;
+      console.log('Created new topic:', topicId);
     }
 
     if (!topicId) {
-      throw new Error('Topic not found');
+      return new Response(
+        JSON.stringify({ error: 'Topic ID is null after creation/fetch' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     // Store quiz in database

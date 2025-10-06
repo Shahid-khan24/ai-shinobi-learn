@@ -45,13 +45,6 @@ const Hero = () => {
               Start Learning Now
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button 
-              variant="ninja" 
-              size="lg"
-              onClick={() => window.open('https://youtube.com/@lovable', '_blank')}
-            >
-              View Demo
-            </Button>
           </div>
 
           {/* Feature Cards */}

@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import SubjectGrid from "@/components/SubjectGrid";
 import Dashboard from "@/components/Dashboard";
 import SyllabusUpload from "@/components/SyllabusUpload";
+import SyllabusSection from "@/components/SyllabusSection";
 
 const Index = () => {
   return (
@@ -13,6 +14,7 @@ const Index = () => {
         <SyllabusUpload />
       </div>
       <SubjectGrid />
+      <SyllabusSection />
       <Dashboard />
     </div>
   );

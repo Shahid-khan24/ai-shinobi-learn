@@ -250,7 +250,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_subject_leaderboard: {
+        Args: { subject_name: string }
+        Returns: {
+          avatar_url: string
+          display_name: string
+          quiz_count: number
+          subject_score: number
+          user_id: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

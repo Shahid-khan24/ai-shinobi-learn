@@ -47,11 +47,12 @@ const Leaderboard = () => {
         const subjectData: { [key: string]: SubjectLeaderboardEntry[] } = {};
         
         for (const subject of subjects) {
-          const { data: subjectScores, error: subjectError } = await supabase
-            .rpc('get_subject_leaderboard' as any, { subject_name: subject }) as { data: SubjectLeaderboardEntry[] | null, error: any };
+          const result = await (supabase.rpc as any)('get_subject_leaderboard', { 
+            subject_name: subject 
+          });
 
-          if (!subjectError && subjectScores) {
-            subjectData[subject] = subjectScores;
+          if (!result.error && result.data) {
+            subjectData[subject] = result.data as SubjectLeaderboardEntry[];
           }
         }
         

@@ -4,6 +4,7 @@ import Navigation from "@/components/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Trophy, Medal, Award } from "lucide-react";
 
 interface LeaderboardEntry {
@@ -15,13 +16,24 @@ interface LeaderboardEntry {
   avatar_url: string | null;
 }
 
+interface SubjectLeaderboardEntry {
+  user_id: string;
+  display_name: string;
+  subject_score: number;
+  quiz_count: number;
+  avatar_url: string | null;
+}
+
 const Leaderboard = () => {
   const [leaders, setLeaders] = useState<LeaderboardEntry[]>([]);
+  const [subjectLeaders, setSubjectLeaders] = useState<{ [key: string]: SubjectLeaderboardEntry[] }>({});
   const [loading, setLoading] = useState(true);
+  const [subjects] = useState(['Islam', 'Tamil', 'English', 'Technology']);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
+        // Fetch overall leaderboard
         const { data, error } = await supabase
           .from('profiles')
           .select('id, display_name, total_score, total_quizzes, current_streak, avatar_url')
@@ -30,6 +42,20 @@ const Leaderboard = () => {
 
         if (error) throw error;
         setLeaders(data || []);
+
+        // Fetch subject-specific leaderboards
+        const subjectData: { [key: string]: SubjectLeaderboardEntry[] } = {};
+        
+        for (const subject of subjects) {
+          const { data: subjectScores, error: subjectError } = await supabase
+            .rpc('get_subject_leaderboard', { subject_name: subject });
+
+          if (!subjectError && subjectScores) {
+            subjectData[subject] = subjectScores;
+          }
+        }
+        
+        setSubjectLeaders(subjectData);
       } catch (error) {
         console.error('Error fetching leaderboard:', error);
       } finally {
@@ -58,7 +84,7 @@ const Leaderboard = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [subjects]);
 
   const getMedalIcon = (position: number) => {
     switch (position) {
@@ -84,74 +110,108 @@ const Leaderboard = () => {
     );
   }
 
+  const renderLeaderboardList = (entries: (LeaderboardEntry | SubjectLeaderboardEntry)[], isSubject = false) => {
+    if (entries.length === 0) {
+      return (
+        <Card>
+          <CardContent className="py-12 text-center">
+            <Trophy className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+            <p className="text-xl text-muted-foreground">
+              No learners yet. Be the first!
+            </p>
+          </CardContent>
+        </Card>
+      );
+    }
+
+    return (
+      <div className="space-y-3">
+        {entries.map((entry, index) => {
+          const score = isSubject ? (entry as SubjectLeaderboardEntry).subject_score : (entry as LeaderboardEntry).total_score;
+          const quizCount = isSubject ? (entry as SubjectLeaderboardEntry).quiz_count : (entry as LeaderboardEntry).total_quizzes;
+          const displayName = entry.display_name;
+          const streak = !isSubject ? (entry as LeaderboardEntry).current_streak : 0;
+          const entryId = isSubject ? (entry as SubjectLeaderboardEntry).user_id : (entry as LeaderboardEntry).id;
+
+          return (
+            <Card key={entryId} className="hover:border-primary/50 transition-colors animate-ninja-appear">
+              <CardContent className="py-4">
+                <div className="flex items-center gap-4">
+                  <div className="flex-shrink-0 w-12 text-center">
+                    {getMedalIcon(index + 1)}
+                  </div>
+                  
+                  <Avatar className="h-12 w-12">
+                    <AvatarFallback className="bg-primary/20 text-primary font-semibold">
+                      {displayName?.charAt(0).toUpperCase() || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+
+                  <div className="flex-1">
+                    <div className="font-semibold text-lg">
+                      {displayName || 'Anonymous User'}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {quizCount} quizzes completed
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    {!isSubject && streak > 0 && (
+                      <Badge variant="secondary" className="flex items-center gap-1">
+                        🔥 {streak} day streak
+                      </Badge>
+                    )}
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-primary">
+                        {score}
+                      </div>
+                      <div className="text-xs text-muted-foreground">points</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <Trophy className="w-16 h-16 text-primary mx-auto mb-4" />
+          <div className="text-center mb-12 animate-ninja-appear">
+            <Trophy className="w-16 h-16 text-primary mx-auto mb-4 animate-shuriken-spin" />
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Global <span className="text-gradient">Leaderboard</span>
+              <span className="text-gradient">Leaderboard</span>
             </h1>
             <p className="text-xl text-muted-foreground">
               See how you stack up against other learners
             </p>
           </div>
 
-          <div className="space-y-3">
-            {leaders.map((leader, index) => (
-              <Card key={leader.id} className="hover:border-primary/50 transition-colors">
-                <CardContent className="py-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex-shrink-0 w-12 text-center">
-                      {getMedalIcon(index + 1)}
-                    </div>
-                    
-                    <Avatar className="h-12 w-12">
-                      <AvatarFallback className="bg-primary/20 text-primary font-semibold">
-                        {leader.display_name?.charAt(0).toUpperCase() || 'U'}
-                      </AvatarFallback>
-                    </Avatar>
+          <Tabs defaultValue="overall" className="w-full">
+            <TabsList className="grid w-full grid-cols-5 mb-8">
+              <TabsTrigger value="overall">Overall</TabsTrigger>
+              <TabsTrigger value="Islam">Islam</TabsTrigger>
+              <TabsTrigger value="Tamil">Tamil</TabsTrigger>
+              <TabsTrigger value="English">English</TabsTrigger>
+              <TabsTrigger value="Technology">Technology</TabsTrigger>
+            </TabsList>
 
-                    <div className="flex-1">
-                      <div className="font-semibold text-lg">
-                        {leader.display_name || 'Anonymous User'}
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        {leader.total_quizzes} quizzes completed
-                      </div>
-                    </div>
+            <TabsContent value="overall">
+              {renderLeaderboardList(leaders)}
+            </TabsContent>
 
-                    <div className="flex items-center gap-4">
-                      {leader.current_streak > 0 && (
-                        <Badge variant="secondary" className="flex items-center gap-1">
-                          🔥 {leader.current_streak} day streak
-                        </Badge>
-                      )}
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-primary">
-                          {leader.total_score}
-                        </div>
-                        <div className="text-xs text-muted-foreground">points</div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            {subjects.map(subject => (
+              <TabsContent key={subject} value={subject}>
+                {renderLeaderboardList(subjectLeaders[subject] || [], true)}
+              </TabsContent>
             ))}
-          </div>
-
-          {leaders.length === 0 && (
-            <Card>
-              <CardContent className="py-12 text-center">
-                <Trophy className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                <p className="text-xl text-muted-foreground">
-                  No learners yet. Be the first!
-                </p>
-              </CardContent>
-            </Card>
-          )}
+          </Tabs>
         </div>
       </div>
     </div>

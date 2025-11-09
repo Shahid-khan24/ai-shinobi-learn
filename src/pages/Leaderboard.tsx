@@ -28,27 +28,29 @@ const Leaderboard = () => {
   const [leaders, setLeaders] = useState<LeaderboardEntry[]>([]);
   const [subjectLeaders, setSubjectLeaders] = useState<{ [key: string]: SubjectLeaderboardEntry[] }>({});
   const [loading, setLoading] = useState(true);
+  const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly' | 'all_time'>('all_time');
   const [subjects] = useState(['Islam', 'Tamil', 'English', 'Technology']);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
+      setLoading(true);
       try {
-        // Fetch overall leaderboard
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('id, display_name, total_score, total_quizzes, current_streak, avatar_url')
-          .order('total_score', { ascending: false })
-          .limit(50);
+        // Fetch overall leaderboard with time period
+        const overallResult = await (supabase.rpc as any)('get_overall_leaderboard', { 
+          time_period: timePeriod 
+        });
 
-        if (error) throw error;
-        setLeaders(data || []);
+        if (!overallResult.error && overallResult.data) {
+          setLeaders(overallResult.data as LeaderboardEntry[]);
+        }
 
         // Fetch subject-specific leaderboards
         const subjectData: { [key: string]: SubjectLeaderboardEntry[] } = {};
         
         for (const subject of subjects) {
           const result = await (supabase.rpc as any)('get_subject_leaderboard', { 
-            subject_name: subject 
+            subject_name: subject,
+            time_period: timePeriod 
           });
 
           if (!result.error && result.data) {
@@ -74,7 +76,7 @@ const Leaderboard = () => {
         {
           event: '*',
           schema: 'public',
-          table: 'profiles'
+          table: 'quiz_attempts'
         },
         () => {
           fetchLeaderboard();
@@ -85,7 +87,7 @@ const Leaderboard = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [subjects]);
+  }, [subjects, timePeriod]);
 
   const getMedalIcon = (position: number) => {
     switch (position) {
@@ -100,16 +102,6 @@ const Leaderboard = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navigation />
-        <div className="container mx-auto px-4 py-20 flex justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </div>
-      </div>
-    );
-  }
 
   const renderLeaderboardList = (entries: (LeaderboardEntry | SubjectLeaderboardEntry)[], isSubject = false) => {
     if (entries.length === 0) {
@@ -194,25 +186,48 @@ const Leaderboard = () => {
             </p>
           </div>
 
-          <Tabs defaultValue="overall" className="w-full">
-            <TabsList className="grid w-full grid-cols-5 mb-8">
-              <TabsTrigger value="overall">Overall</TabsTrigger>
-              <TabsTrigger value="Islam">Islam</TabsTrigger>
-              <TabsTrigger value="Tamil">Tamil</TabsTrigger>
-              <TabsTrigger value="English">English</TabsTrigger>
-              <TabsTrigger value="Technology">Technology</TabsTrigger>
-            </TabsList>
+          {/* Time Period Selector */}
+          <div className="flex justify-center mb-8">
+            <Tabs value={timePeriod} onValueChange={(value) => setTimePeriod(value as any)} className="w-full max-w-md">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="weekly" className="animate-ninja-appear">
+                  This Week
+                </TabsTrigger>
+                <TabsTrigger value="monthly" className="animate-ninja-appear" style={{ animationDelay: '0.1s' }}>
+                  This Month
+                </TabsTrigger>
+                <TabsTrigger value="all_time" className="animate-ninja-appear" style={{ animationDelay: '0.2s' }}>
+                  All Time
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
 
-            <TabsContent value="overall">
-              {renderLeaderboardList(leaders)}
-            </TabsContent>
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : (
+            <Tabs defaultValue="overall" className="w-full">
+              <TabsList className="grid w-full grid-cols-5 mb-8">
+                <TabsTrigger value="overall">Overall</TabsTrigger>
+                <TabsTrigger value="Islam">Islam</TabsTrigger>
+                <TabsTrigger value="Tamil">Tamil</TabsTrigger>
+                <TabsTrigger value="English">English</TabsTrigger>
+                <TabsTrigger value="Technology">Technology</TabsTrigger>
+              </TabsList>
 
-            {subjects.map(subject => (
-              <TabsContent key={subject} value={subject}>
-                {renderLeaderboardList(subjectLeaders[subject] || [], true)}
+              <TabsContent value="overall">
+                {renderLeaderboardList(leaders)}
               </TabsContent>
-            ))}
-          </Tabs>
+
+              {subjects.map(subject => (
+                <TabsContent key={subject} value={subject}>
+                  {renderLeaderboardList(subjectLeaders[subject] || [], true)}
+                </TabsContent>
+              ))}
+            </Tabs>
+          )}
         </div>
       </div>
     </div>

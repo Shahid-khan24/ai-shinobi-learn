@@ -16,6 +16,7 @@ import {
   Home
 } from "lucide-react";
 import ShareScore from "@/components/ShareScore";
+import DeathNoteAnimation from "@/components/DeathNoteAnimation";
 
 interface Question {
   question: string;
@@ -155,40 +156,47 @@ const Quiz = () => {
   if (quizCompleted) {
     const percentage = Math.round((score / questions.length) * 100);
     return (
-      <div className="min-h-screen bg-background py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="card-glow p-12 rounded-xl animate-ninja-appear chakra-glow">
-              <Brain className="w-20 h-20 text-primary mx-auto mb-6 rasengan-effect" />
-              <h2 className="text-4xl font-bold mb-4">
-                Quiz <span className="text-gradient">Completed!</span>
-              </h2>
-              <div className="text-6xl font-bold text-gradient my-8">
-                {score}/{questions.length}
-              </div>
-              <p className="text-2xl text-muted-foreground mb-8">
-                You scored {percentage}%
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <ShareScore 
-                  score={score}
-                  totalQuestions={questions.length}
-                  subject={quiz.quiz_topics?.name || "Quiz"}
-                />
-                <Button 
-                  variant="hero" 
-                  size="lg"
-                  onClick={() => navigate('/')}
-                >
-                  <Home className="w-5 h-5" />
-                  Go Home
-                </Button>
+      <>
+        <DeathNoteAnimation 
+          score={score}
+          totalQuestions={questions.length}
+          username={user?.user_metadata?.display_name || user?.email?.split('@')[0]}
+        />
+        <div className="min-h-screen bg-background py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl mx-auto text-center">
+              <div className="card-glow p-12 rounded-xl animate-ninja-appear chakra-glow">
+                <Brain className="w-20 h-20 text-primary mx-auto mb-6 rasengan-effect" />
+                <h2 className="text-4xl font-bold mb-4">
+                  Quiz <span className="text-gradient">Completed!</span>
+                </h2>
+                <div className="text-6xl font-bold text-gradient my-8">
+                  {score}/{questions.length}
+                </div>
+                <p className="text-2xl text-muted-foreground mb-8">
+                  You scored {percentage}%
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <ShareScore 
+                    score={score}
+                    totalQuestions={questions.length}
+                    subject={quiz.quiz_topics?.name || "Quiz"}
+                  />
+                  <Button 
+                    variant="hero" 
+                    size="lg"
+                    onClick={() => navigate('/')}
+                  >
+                    <Home className="w-5 h-5" />
+                    Go Home
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 

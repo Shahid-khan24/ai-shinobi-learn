@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Brain, Home, TrendingUp, Settings, Zap, LogOut } from "lucide-react";
+import { Brain, Home, TrendingUp, Settings, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
 
@@ -11,7 +11,7 @@ const Navigation = () => {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <div className="w-8 h-8 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center">
-            <Zap className="w-5 h-5 text-primary-foreground" />
+            <span className="text-2xl font-serif font-bold text-primary-foreground italic" style={{ fontFamily: 'Georgia, serif' }}>L</span>
           </div>
           <span className="text-xl font-bold text-gradient">AI Shinobi</span>
         </Link>

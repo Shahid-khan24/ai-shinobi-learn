@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Trophy, Medal, Award } from "lucide-react";
+import UserProfileDialog from "@/components/UserProfileDialog";
 
 interface LeaderboardEntry {
   id: string;
@@ -30,6 +31,9 @@ const Leaderboard = () => {
   const [loading, setLoading] = useState(true);
   const [timePeriod, setTimePeriod] = useState<'weekly' | 'monthly' | 'all_time'>('all_time');
   const [subjects] = useState(['Islam', 'Tamil', 'English', 'Technology']);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [selectedUserName, setSelectedUserName] = useState<string>('');
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -103,6 +107,12 @@ const Leaderboard = () => {
   };
 
 
+  const handleEntryClick = (userId: string, displayName: string) => {
+    setSelectedUserId(userId);
+    setSelectedUserName(displayName);
+    setProfileDialogOpen(true);
+  };
+
   const renderLeaderboardList = (entries: (LeaderboardEntry | SubjectLeaderboardEntry)[], isSubject = false) => {
     if (entries.length === 0) {
       return (
@@ -127,7 +137,11 @@ const Leaderboard = () => {
           const entryId = isSubject ? (entry as SubjectLeaderboardEntry).user_id : (entry as LeaderboardEntry).id;
 
           return (
-            <Card key={entryId} className="hover:border-primary/50 transition-colors animate-ninja-appear">
+            <Card 
+              key={entryId} 
+              className="hover:border-primary/50 transition-colors animate-ninja-appear cursor-pointer"
+              onClick={() => handleEntryClick(entryId, displayName)}
+            >
               <CardContent className="py-4">
                 <div className="flex items-center gap-4">
                   <div className="flex-shrink-0 w-12 text-center">
@@ -230,6 +244,13 @@ const Leaderboard = () => {
           )}
         </div>
       </div>
+
+      <UserProfileDialog
+        userId={selectedUserId}
+        displayName={selectedUserName}
+        open={profileDialogOpen}
+        onOpenChange={setProfileDialogOpen}
+      />
     </div>
   );
 };

@@ -2,60 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-/* AI Shinobi Design System - Death Note Inspired Theme
+/* AI Shinobi Design System - L (Lawliet) Inspired Theme
 All colors MUST be HSL for consistency.
-Dark, dramatic aesthetics with crimson accents.
+Detective aesthetic with cool blues and analytical grays.
 */
 
 @layer base {
   :root {
-    /* Core Background & Text - Death Note Black */
-    --background: 0 0% 4%;
-    --foreground: 0 0% 98%;
+    /* Core Background & Text - L's Dark World */
+    --background: 216 28% 7%;
+    --foreground: 210 20% 98%;
 
-    /* Card Components - Notebook Black */
-    --card: 0 0% 6%;
-    --card-foreground: 0 0% 98%;
+    /* Card Components - Detective's Notebook */
+    --card: 217 33% 10%;
+    --card-foreground: 210 20% 98%;
 
     /* Popover Components */
-    --popover: 0 0% 6%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 217 33% 10%;
+    --popover-foreground: 210 20% 98%;
 
-    /* Primary Brand - Crimson Death Note Red */
-    --primary: 0 85% 45%;
-    --primary-foreground: 0 0% 98%;
-    --primary-glow: 0 85% 60%;
+    /* Primary Brand - Analytical Blue */
+    --primary: 212 60% 50%;
+    --primary-foreground: 210 20% 98%;
+    --primary-glow: 212 70% 65%;
 
-    /* Secondary - Deep Charcoal */
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 98%;
+    /* Secondary - Deep Blue-Gray */
+    --secondary: 216 28% 15%;
+    --secondary-foreground: 210 20% 98%;
 
-    /* Muted Elements - Dark Gray */
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 60%;
+    /* Muted Elements - Subdued Blue-Gray */
+    --muted: 215 25% 20%;
+    --muted-foreground: 215 15% 65%;
 
-    /* Accent - Blood Red */
-    --accent: 0 75% 35%;
-    --accent-foreground: 0 0% 98%;
+    /* Accent - Lighter Blue */
+    --accent: 200 60% 45%;
+    --accent-foreground: 210 20% 98%;
 
-    /* Destructive States - Intense Red */
-    --destructive: 0 90% 50%;
-    --destructive-foreground: 0 0% 98%;
+    /* Destructive States - Keep Red for Warnings */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 20% 98%;
 
-    /* Borders & Inputs - Subtle Dark */
-    --border: 0 0% 15%;
-    --input: 0 0% 10%;
-    --ring: 0 85% 45%;
+    /* Borders & Inputs - Subtle Blue-Gray */
+    --border: 215 25% 20%;
+    --input: 217 33% 12%;
+    --ring: 212 60% 50%;
 
-    /* Gradients - Death Note Themed */
-    --gradient-primary: linear-gradient(135deg, hsl(0 85% 45%), hsl(0 75% 35%));
-    --gradient-secondary: linear-gradient(180deg, hsl(0 0% 6%), hsl(0 0% 4%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 8%), hsl(0 0% 5%));
+    /* Gradients - L Themed */
+    --gradient-primary: linear-gradient(135deg, hsl(212 60% 50%), hsl(200 60% 45%));
+    --gradient-secondary: linear-gradient(180deg, hsl(217 33% 10%), hsl(216 28% 7%));
+    --gradient-card: linear-gradient(145deg, hsl(217 33% 12%), hsl(216 28% 8%));
 
-    /* Shadows & Effects - Crimson Glow */
-    --shadow-glow: 0 0 25px hsl(0 85% 45% / 0.4);
-    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.6);
-    --shadow-elevated: 0 16px 48px hsl(0 0% 0% / 0.8);
+    /* Shadows & Effects - Cool Blue Glow */
+    --shadow-glow: 0 0 25px hsl(212 60% 50% / 0.3);
+    --shadow-card: 0 8px 32px hsl(216 28% 5% / 0.6);
+    --shadow-elevated: 0 16px 48px hsl(216 28% 3% / 0.8);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -202,8 +202,8 @@ Dark, dramatic aesthetics with crimson accents.
   }
 
   .chakra-glow {
-    box-shadow: 0 0 15px hsl(0 85% 45% / 0.4), 0 0 30px hsl(0 75% 35% / 0.3);
-    animation: chakra-pulse 2s ease-in-out infinite;
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3), 0 0 40px hsl(var(--primary) / 0.15);
+    animation: pulse-glow 3s ease-in-out infinite;
   }
 
   .shuriken-rotate {

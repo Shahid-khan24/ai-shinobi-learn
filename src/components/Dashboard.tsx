@@ -4,17 +4,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { 
   Target, 
-  Flame, 
   Trophy, 
   Brain,
-  Calendar,
-  Award,
   Loader2
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import StreakCounter from "./StreakCounter";
+import AchievementsGrid from "./AchievementsGrid";
 
 interface UserStats {
-  current_streak: number;
   total_score: number;
   total_quizzes: number;
 }
@@ -46,27 +44,12 @@ const Dashboard = () => {
         // Fetch user stats
         const { data: profileData } = await supabase
           .from('profiles')
-          .select('current_streak, total_score, total_quizzes')
+          .select('total_score, total_quizzes')
           .eq('user_id', user.id)
           .single();
 
         if (profileData) {
           setStats(profileData);
-        }
-
-        // Fetch recent achievements
-        const { data: achievementsData } = await supabase
-          .from('user_achievements')
-          .select('*, achievements(*)')
-          .eq('user_id', user.id)
-          .order('earned_at', { ascending: false })
-          .limit(3);
-
-        if (achievementsData) {
-          setAchievements(achievementsData.map(ua => ({
-            ...ua.achievements,
-            earned_at: ua.earned_at
-          })));
         }
 
         // Fetch recent quiz attempts
@@ -114,10 +97,9 @@ const Dashboard = () => {
   }
 
   const statsDisplay = [
-    { label: "Current Streak", value: `${stats?.current_streak || 0} days`, icon: Flame, color: "text-orange-500" },
-    { label: "Total Score", value: stats?.total_score || 0, icon: Trophy, color: "text-yellow-500" },
-    { label: "Quizzes Completed", value: stats?.total_quizzes || 0, icon: Target, color: "text-green-500" },
-    { label: "Achievements", value: achievements.length, icon: Award, color: "text-purple-500" }
+    { label: "Total Score", value: stats?.total_score || 0, icon: Trophy, color: "text-primary" },
+    { label: "Cases Solved", value: stats?.total_quizzes || 0, icon: Target, color: "text-accent" },
+    { label: "Intelligence", value: "Genius", icon: Brain, color: "text-primary" }
   ];
 
   return (
@@ -125,75 +107,52 @@ const Dashboard = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Track Your <span className="text-gradient">Progress</span>
+            Your <span className="text-gradient">Investigation</span> Progress
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Monitor your learning journey with detailed analytics and performance insights
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto italic">
+            "There are many types of monsters in this world. Monsters who will not show themselves and who cause trouble..."
           </p>
+        </div>
+        
+        {/* Streak Counter - Prominent Display */}
+        <div className="max-w-md mx-auto mb-12 animate-fade-in">
+          <StreakCounter />
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
           {statsDisplay.map((stat, index) => {
             const IconComponent = stat.icon;
             return (
-              <div key={index} className="card-glow p-6 rounded-xl text-center animate-ninja-appear ninja-hover" style={{ animationDelay: `${index * 100}ms` }}>
-                <IconComponent className={`w-8 h-8 ${stat.color} mx-auto mb-3 rasengan-effect`} />
-                <div className="text-2xl font-bold mb-1">{stat.value}</div>
+              <div key={index} className="card-glow p-6 rounded-xl text-center animate-scale-in hover:border-primary/30 transition-all duration-300" style={{ animationDelay: `${index * 100}ms` }}>
+                <IconComponent className={`w-8 h-8 ${stat.color} mx-auto mb-3 animate-pulse`} />
+                <div className="text-3xl font-bold mb-1">{stat.value}</div>
                 <div className="text-sm text-muted-foreground">{stat.label}</div>
               </div>
             );
           })}
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {/* Achievements */}
-          <div className="card-glow p-6 rounded-xl animate-ninja-appear" style={{ animationDelay: '200ms' }}>
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold flex items-center gap-2">
-                <Award className="w-5 h-5 text-primary shuriken-rotate" />
-                Recent Achievements
-              </h3>
-            </div>
-            
-            <div className="space-y-4">
-              {achievements.length === 0 ? (
-                <p className="text-muted-foreground text-center py-8">
-                  Complete quizzes to earn achievements!
-                </p>
-              ) : (
-                achievements.map((achievement) => (
-                  <div key={achievement.id} className="flex items-center gap-4 p-3 rounded-lg bg-muted/10 animate-ninja-appear hover-scale chakra-glow">
-                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                      <Trophy className="w-6 h-6 text-primary rasengan-effect" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-semibold">{achievement.name}</div>
-                      <div className="text-sm text-muted-foreground">{achievement.description}</div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
+        {/* Achievements Section */}
+        <div className="mb-12 animate-fade-in" style={{ animationDelay: '300ms' }}>
+          <AchievementsGrid />
+        </div>
 
-          {/* Recent Activity */}
-          <div className="card-glow p-6 rounded-xl animate-ninja-appear" style={{ animationDelay: '300ms' }}>
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-primary" />
-                Recent Activity
-              </h3>
-            </div>
+        {/* Recent Activity */}
+        <div className="max-w-4xl mx-auto">
+          <div className="card-glow p-6 rounded-xl animate-fade-in" style={{ animationDelay: '400ms' }}>
+            <h3 className="text-2xl font-bold mb-6">
+              Recent <span className="text-gradient">Cases</span>
+            </h3>
 
             <div className="space-y-4">
               {recentActivity.length === 0 ? (
-                <p className="text-muted-foreground text-center py-8">
-                  Start a quiz to see your activity!
+                <p className="text-muted-foreground text-center py-8 italic">
+                  Begin your investigation...
                 </p>
               ) : (
                 recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/10 hover:bg-muted/20 transition-colors animate-kunai-throw hover-scale" style={{ animationDelay: `${index * 50}ms` }}>
+                  <div key={index} className="flex items-center justify-between p-4 rounded-lg bg-muted/10 hover:bg-muted/20 transition-all duration-300 animate-scale-in border border-border/30 hover:border-primary/30" style={{ animationDelay: `${index * 50}ms` }}>
                     <div>
                       <div className="font-medium">{activity.quizzes?.quiz_topics?.name}</div>
                       <div className="text-sm text-muted-foreground flex items-center gap-2">
@@ -215,14 +174,6 @@ const Dashboard = () => {
               )}
             </div>
           </div>
-        </div>
-
-        {/* CTA */}
-        <div className="text-center mt-12">
-          <Button variant="hero" size="lg" onClick={() => navigate('/#subjects')}>
-            <Brain className="w-5 h-5" />
-            Continue Learning
-          </Button>
         </div>
       </div>
     </section>

@@ -9,11 +9,27 @@ const Navigation = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-border/50">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center">
-            <span className="text-2xl font-serif font-bold text-primary-foreground italic" style={{ fontFamily: 'Georgia, serif' }}>L</span>
+        <Link to="/" className="flex items-center gap-2 group">
+          <div className="relative w-10 h-10 flex items-center justify-center">
+            {/* L Symbol - Death Note Style */}
+            <div className="absolute inset-0 bg-background border-2 border-primary rounded-sm transform rotate-3 group-hover:rotate-6 transition-transform duration-300" />
+            <span 
+              className="relative text-3xl font-bold text-primary drop-shadow-[0_0_8px_hsl(var(--primary))] group-hover:drop-shadow-[0_0_12px_hsl(var(--primary))] transition-all duration-300" 
+              style={{ 
+                fontFamily: 'Times New Roman, serif',
+                fontStyle: 'italic',
+                fontWeight: '900',
+                letterSpacing: '-2px'
+              }}
+            >
+              L
+            </span>
           </div>
-          <span className="text-xl font-bold text-gradient">AI Shinobi</span>
+          <span className="text-xl font-bold">
+            <span className="text-foreground">Death</span>
+            <span className="text-gradient ml-1">Note</span>
+            <span className="text-muted-foreground text-sm ml-2">Quiz</span>
+          </span>
         </Link>
         
         <div className="hidden md:flex items-center gap-6">

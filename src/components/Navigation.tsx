@@ -9,16 +9,17 @@ const Navigation = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-border/50">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <img 
-            src="/src/assets/l-icon.png" 
-            alt="L Death Note Icon" 
-            className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_8px_hsl(var(--primary))] group-hover:drop-shadow-[0_0_12px_hsl(var(--primary))]"
-          />
-          <span className="text-xl font-bold">
-            <span className="text-foreground">Death</span>
-            <span className="text-gradient ml-1">Note</span>
-            <span className="text-muted-foreground text-sm ml-2">Quiz</span>
+        <Link to="/" className="flex items-center justify-center group">
+          <span 
+            className="text-5xl font-bold text-primary drop-shadow-[0_0_10px_hsl(var(--primary))] group-hover:drop-shadow-[0_0_16px_hsl(var(--primary))] group-hover:scale-110 transition-all duration-300" 
+            style={{ 
+              fontFamily: 'Times New Roman, serif',
+              fontStyle: 'italic',
+              fontWeight: '900',
+              letterSpacing: '-4px'
+            }}
+          >
+            L
           </span>
         </Link>
         

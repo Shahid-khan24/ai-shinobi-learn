@@ -11,10 +11,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import StreakCounter from "./StreakCounter";
 import AchievementsGrid from "./AchievementsGrid";
+import LComparisonCard from "./LComparisonCard";
 
 interface UserStats {
   total_score: number;
   total_quizzes: number;
+  current_streak: number;
 }
 
 interface Achievement {
@@ -44,7 +46,7 @@ const Dashboard = () => {
         // Fetch user stats
         const { data: profileData } = await supabase
           .from('profiles')
-          .select('total_score, total_quizzes')
+          .select('total_score, total_quizzes, current_streak')
           .eq('user_id', user.id)
           .single();
 
@@ -102,6 +104,21 @@ const Dashboard = () => {
     { label: "Intelligence", value: "Genius", icon: Brain, color: "text-primary" }
   ];
 
+  // Calculate stats for L comparison
+  const totalScore = stats?.total_score || 0;
+  const totalQuizzes = stats?.total_quizzes || 0;
+  const accuracy = totalQuizzes > 0 ? (totalScore / (totalQuizzes * 10)) * 100 : 0; // Assuming 10 questions per quiz
+  const averageTime = recentActivity.length > 0 
+    ? recentActivity.reduce((acc, activity) => acc + 45, 0) / recentActivity.length // Placeholder: 45s average
+    : 60;
+
+  const comparisonStats = {
+    accuracy: Math.round(accuracy),
+    averageTime: Math.round(averageTime),
+    totalQuizzes: totalQuizzes,
+    streak: stats?.current_streak || 0,
+  };
+
   return (
     <section id="dashboard" className="py-20 relative">
       <div className="container mx-auto px-4">
@@ -117,6 +134,11 @@ const Dashboard = () => {
         {/* Streak Counter - Prominent Display */}
         <div className="max-w-md mx-auto mb-12 animate-fade-in">
           <StreakCounter />
+        </div>
+
+        {/* L Comparison Card */}
+        <div className="max-w-2xl mx-auto mb-12 animate-fade-in" style={{ animationDelay: '100ms' }}>
+          <LComparisonCard userStats={comparisonStats} />
         </div>
 
         {/* Stats Grid */}

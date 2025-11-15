@@ -50,7 +50,7 @@ const AchievementBadge = ({ achievement }: AchievementBadgeProps) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Death Note paper texture effect */}
+      {/* Paper texture effect */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
         {[...Array(5)].map((_, i) => (
           <div 

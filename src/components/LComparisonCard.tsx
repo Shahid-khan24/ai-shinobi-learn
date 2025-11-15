@@ -71,7 +71,7 @@ const LComparisonCard = ({ userStats }: LComparisonCardProps) => {
               {matchLevel.level}
             </div>
             <p className="text-xs text-muted-foreground">
-              Match to L's Abilities
+              Detective Ability Rating
             </p>
           </div>
         </div>

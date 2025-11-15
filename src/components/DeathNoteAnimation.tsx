@@ -71,7 +71,7 @@ const DeathNoteAnimation = ({ score, totalQuestions, username }: DeathNoteAnimat
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center ${getBackgroundStyle()} animate-fade-in`}>
       <div className="relative max-w-2xl w-full mx-4">
-        {/* Death Note Paper Effect */}
+        {/* Investigation Report Paper Effect */}
         <div className={`relative bg-gradient-to-br ${getPaperGradient()} p-12 rounded-lg shadow-2xl border-2 ${getBorderColor()}`}>
           {/* Horizontal lines like notebook paper */}
           <div className="absolute inset-0 pointer-events-none opacity-20">

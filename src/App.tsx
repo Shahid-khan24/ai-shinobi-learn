@@ -11,6 +11,7 @@ import Quiz from "./pages/Quiz";
 import QuizHistory from "./pages/QuizHistory";
 import Leaderboard from "./pages/Leaderboard";
 import SyllabusQuiz from "./pages/SyllabusQuiz";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Index />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/quiz-selection/:topic" element={<QuizSelection />} />
             <Route path="/quiz/:quizId" element={<Quiz />} />
             <Route path="/quiz-history" element={<QuizHistory />} />

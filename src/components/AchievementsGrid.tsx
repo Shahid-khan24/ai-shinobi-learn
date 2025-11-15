@@ -109,7 +109,7 @@ const AchievementsGrid = () => {
         <div className="flex items-center gap-3">
           <Award className="w-6 h-6 text-primary" />
           <h3 className="text-2xl font-bold">
-            Death Note <span className="text-gradient">Achievements</span>
+            Detective <span className="text-gradient">Achievements</span>
           </h3>
         </div>
         <div className="text-sm text-muted-foreground">

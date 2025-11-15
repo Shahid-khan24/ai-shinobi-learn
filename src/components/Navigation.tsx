@@ -30,6 +30,9 @@ const Navigation = () => {
           <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
             Dashboard
           </Link>
+          <Link to="/profile" className="text-sm font-medium hover:text-primary transition-colors">
+            Profile
+          </Link>
           <Link to="/quiz-history" className="text-sm font-medium hover:text-primary transition-colors">
             History
           </Link>

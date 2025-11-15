@@ -50,8 +50,10 @@ export type Database = {
           created_at: string
           current_streak: number | null
           display_name: string | null
+          experience_points: number | null
           favorite_subject: string | null
           id: string
+          level: number | null
           total_quizzes: number | null
           total_score: number | null
           updated_at: string
@@ -62,8 +64,10 @@ export type Database = {
           created_at?: string
           current_streak?: number | null
           display_name?: string | null
+          experience_points?: number | null
           favorite_subject?: string | null
           id?: string
+          level?: number | null
           total_quizzes?: number | null
           total_score?: number | null
           updated_at?: string
@@ -74,8 +78,10 @@ export type Database = {
           created_at?: string
           current_streak?: number | null
           display_name?: string | null
+          experience_points?: number | null
           favorite_subject?: string | null
           id?: string
+          level?: number | null
           total_quizzes?: number | null
           total_score?: number | null
           updated_at?: string

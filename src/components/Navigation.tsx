@@ -10,21 +10,11 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-border/50">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="relative w-10 h-10 flex items-center justify-center">
-            {/* L Symbol - Death Note Style */}
-            <div className="absolute inset-0 bg-background border-2 border-primary rounded-sm transform rotate-3 group-hover:rotate-6 transition-transform duration-300" />
-            <span 
-              className="relative text-3xl font-bold text-primary drop-shadow-[0_0_8px_hsl(var(--primary))] group-hover:drop-shadow-[0_0_12px_hsl(var(--primary))] transition-all duration-300" 
-              style={{ 
-                fontFamily: 'Times New Roman, serif',
-                fontStyle: 'italic',
-                fontWeight: '900',
-                letterSpacing: '-2px'
-              }}
-            >
-              L
-            </span>
-          </div>
+          <img 
+            src="/src/assets/l-icon.png" 
+            alt="L Death Note Icon" 
+            className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_8px_hsl(var(--primary))] group-hover:drop-shadow-[0_0_12px_hsl(var(--primary))]"
+          />
           <span className="text-xl font-bold">
             <span className="text-foreground">Death</span>
             <span className="text-gradient ml-1">Note</span>

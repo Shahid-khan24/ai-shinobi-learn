@@ -132,6 +132,16 @@ Detective aesthetic with cool blues and analytical grays.
   body {
     @apply bg-background text-foreground overflow-x-hidden;
   }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Better focus visibility for accessibility */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+  }
 }
 
 @layer components {
@@ -155,8 +165,8 @@ Detective aesthetic with cool blues and analytical grays.
 
   .card-glow:hover {
     border-color: hsl(var(--primary) / 0.5);
-    box-shadow: var(--shadow-glow), var(--shadow-elevated);
-    transform: translateY(-2px);
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.4), var(--shadow-elevated);
+    transform: translateY(-4px) scale(1.02);
   }
 
   /* Subject Cards */
@@ -169,8 +179,8 @@ Detective aesthetic with cool blues and analytical grays.
 
   .subject-card:hover {
     border-color: hsl(var(--primary) / 0.6);
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-glow), var(--shadow-elevated);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.4), 0 8px 32px hsl(216 28% 5% / 0.6);
   }
 
   .subject-card::before {
@@ -195,15 +205,27 @@ Detective aesthetic with cool blues and analytical grays.
   }
 
   .text-gradient {
-    background: var(--gradient-primary);
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--brand-orange)), hsl(var(--accent)));
+    background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    animation: gradient 3s ease infinite;
+  }
+  
+  @keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
   }
 
   /* Ninja Animation Effects */
   .ninja-hover {
-    @apply transition-all duration-300 hover:scale-105 hover:shadow-lg;
+    @apply transition-all duration-300 ease-out hover:scale-105;
+    will-change: transform;
+  }
+  
+  .ninja-hover:hover {
+    box-shadow: 0 0 25px hsl(var(--primary) / 0.4), 0 8px 32px hsl(216 28% 5% / 0.5);
   }
 
   .chakra-glow {

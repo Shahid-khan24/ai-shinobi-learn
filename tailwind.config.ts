@@ -39,6 +39,10 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
+        "brand-orange": {
+          DEFAULT: "hsl(var(--brand-orange))",
+          glow: "hsl(var(--brand-orange-glow))",
+        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -110,6 +114,10 @@ export default {
           "50%": { opacity: "1" },
           "100%": { transform: "translateX(0) rotate(0deg)", opacity: "1" },
         },
+        "gradient": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
         "shadow-clone": {
           "0%, 100%": { transform: "translateX(0)" },
           "25%": { transform: "translateX(-5px)" },
@@ -137,6 +145,7 @@ export default {
         "ninja-appear": "ninja-appear 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
         "shuriken-spin": "shuriken-spin 2s linear infinite",
         "kunai-throw": "kunai-throw 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+        gradient: "gradient 3s ease infinite",
         "shadow-clone": "shadow-clone 0.5s ease-in-out",
         "chakra-pulse": "chakra-pulse 2s ease-in-out infinite",
         "rasengan-spin": "rasengan-spin 3s ease-in-out infinite",

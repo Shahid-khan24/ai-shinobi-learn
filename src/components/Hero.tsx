@@ -27,7 +27,7 @@ const Hero = () => {
 
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
             Master Any Subject with{" "}
-            <span className="text-gradient">AI Shinobi</span>
+            <span className="bg-gradient-to-r from-primary via-brand-orange to-primary bg-clip-text text-transparent animate-gradient" style={{ backgroundSize: "200% 200%" }}>AI Shinobi</span>
           </h1>
 
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">

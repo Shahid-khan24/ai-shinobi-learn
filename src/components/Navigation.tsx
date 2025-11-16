@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Brain, Home, TrendingUp, Settings, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
+import logo from "@/assets/logo.png";
 
 const Navigation = () => {
   const { user, signOut } = useAuth();
@@ -9,17 +10,14 @@ const Navigation = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-border/50">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="flex items-center justify-center group">
-          <span 
-            className="text-5xl font-bold text-primary drop-shadow-[0_0_10px_hsl(var(--primary))] group-hover:drop-shadow-[0_0_16px_hsl(var(--primary))] group-hover:scale-110 transition-all duration-300" 
-            style={{ 
-              fontFamily: 'Times New Roman, serif',
-              fontStyle: 'italic',
-              fontWeight: '900',
-              letterSpacing: '-4px'
-            }}
-          >
-            L
+        <Link to="/" className="flex items-center gap-3 group">
+          <img 
+            src={logo} 
+            alt="AI Shinobi Logo" 
+            className="h-10 w-10 object-contain group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_8px_hsl(var(--primary))] group-hover:drop-shadow-[0_0_16px_hsl(var(--brand-orange))]"
+          />
+          <span className="text-2xl font-bold bg-gradient-to-r from-primary to-brand-orange bg-clip-text text-transparent group-hover:drop-shadow-[0_0_10px_hsl(var(--primary))] transition-all duration-300">
+            AI Shinobi
           </span>
         </Link>
         

@@ -21,22 +21,26 @@ Detective aesthetic with cool blues and analytical grays.
     --popover: 217 33% 10%;
     --popover-foreground: 210 20% 98%;
 
-    /* Primary Brand - Analytical Blue */
-    --primary: 212 60% 50%;
+    /* Primary Brand - Electric Blue */
+    --primary: 212 100% 55%;
     --primary-foreground: 210 20% 98%;
-    --primary-glow: 212 70% 65%;
+    --primary-glow: 212 100% 70%;
 
-    /* Secondary - Deep Blue-Gray */
-    --secondary: 216 28% 15%;
+    /* Secondary - Vibrant Orange */
+    --secondary: 25 95% 55%;
     --secondary-foreground: 210 20% 98%;
 
     /* Muted Elements - Subdued Blue-Gray */
     --muted: 215 25% 20%;
     --muted-foreground: 215 15% 65%;
 
-    /* Accent - Lighter Blue */
-    --accent: 200 60% 45%;
+    /* Accent - Deep Tech Blue */
+    --accent: 220 90% 40%;
     --accent-foreground: 210 20% 98%;
+    
+    /* Brand Orange - Ninja Energy */
+    --brand-orange: 25 95% 55%;
+    --brand-orange-glow: 25 100% 65%;
 
     /* Destructive States - Keep Red for Warnings */
     --destructive: 0 84% 60%;
@@ -47,10 +51,11 @@ Detective aesthetic with cool blues and analytical grays.
     --input: 217 33% 12%;
     --ring: 212 60% 50%;
 
-    /* Gradients - L Themed */
-    --gradient-primary: linear-gradient(135deg, hsl(212 60% 50%), hsl(200 60% 45%));
+    /* Gradients - AI Shinobi Brand */
+    --gradient-primary: linear-gradient(135deg, hsl(212 100% 55%), hsl(25 95% 55%));
     --gradient-secondary: linear-gradient(180deg, hsl(217 33% 10%), hsl(216 28% 7%));
     --gradient-card: linear-gradient(145deg, hsl(217 33% 12%), hsl(216 28% 8%));
+    --gradient-brand: linear-gradient(90deg, hsl(212 100% 55%) 0%, hsl(25 95% 55%) 100%);
 
     /* Shadows & Effects - Cool Blue Glow */
     --shadow-glow: 0 0 25px hsl(212 60% 50% / 0.3);

@@ -12,6 +12,7 @@ import QuizHistory from "./pages/QuizHistory";
 import Leaderboard from "./pages/Leaderboard";
 import SyllabusQuiz from "./pages/SyllabusQuiz";
 import Profile from "./pages/Profile";
+import Trading from "./pages/Trading";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/quiz/:quizId" element={<Quiz />} />
             <Route path="/quiz-history" element={<QuizHistory />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/trading" element={<Trading />} />
             <Route path="/syllabus-quiz/:syllabusId" element={<SyllabusQuiz />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

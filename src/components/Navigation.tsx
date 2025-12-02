@@ -38,6 +38,9 @@ const Navigation = () => {
           <Link to="/leaderboard" className="text-sm font-medium hover:text-primary transition-colors" role="menuitem">
             Leaderboard
           </Link>
+          <Link to="/trading" className="text-sm font-medium hover:text-primary transition-colors" role="menuitem">
+            Trading
+          </Link>
         </div>
 
         <div className="flex items-center gap-4">

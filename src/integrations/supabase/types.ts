@@ -183,6 +183,41 @@ export type Database = {
           },
         ]
       }
+      reward_gifts: {
+        Row: {
+          created_at: string
+          from_user_id: string
+          id: string
+          message: string | null
+          to_user_id: string
+          user_reward_id: string
+        }
+        Insert: {
+          created_at?: string
+          from_user_id: string
+          id?: string
+          message?: string | null
+          to_user_id: string
+          user_reward_id: string
+        }
+        Update: {
+          created_at?: string
+          from_user_id?: string
+          id?: string
+          message?: string | null
+          to_user_id?: string
+          user_reward_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reward_gifts_user_reward_id_fkey"
+            columns: ["user_reward_id"]
+            isOneToOne: false
+            referencedRelation: "user_rewards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rewards: {
         Row: {
           created_at: string
@@ -255,6 +290,42 @@ export type Database = {
         }
         Relationships: []
       }
+      trade_offers: {
+        Row: {
+          created_at: string
+          from_user_id: string
+          id: string
+          message: string | null
+          offering_reward_ids: string[]
+          requesting_reward_ids: string[]
+          status: string
+          to_user_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          from_user_id: string
+          id?: string
+          message?: string | null
+          offering_reward_ids: string[]
+          requesting_reward_ids: string[]
+          status?: string
+          to_user_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          from_user_id?: string
+          id?: string
+          message?: string | null
+          offering_reward_ids?: string[]
+          requesting_reward_ids?: string[]
+          status?: string
+          to_user_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_achievements: {
         Row: {
           achievement_id: string
@@ -321,6 +392,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      complete_trade: { Args: { trade_id: string }; Returns: boolean }
       get_overall_leaderboard: {
         Args: { time_period?: string }
         Returns: {
@@ -353,6 +425,14 @@ export type Database = {
               user_id: string
             }[]
           }
+      process_gift: {
+        Args: {
+          gift_message?: string
+          gift_user_reward_id: string
+          recipient_user_id: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

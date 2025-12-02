@@ -48,7 +48,7 @@ const Dashboard = () => {
           .from('profiles')
           .select('total_score, total_quizzes, current_streak')
           .eq('user_id', user.id)
-          .single();
+          .maybeSingle();
 
         if (profileData) {
           setStats(profileData);

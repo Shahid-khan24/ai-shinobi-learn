@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import ShareScore from "@/components/ShareScore";
 import DeathNoteAnimation from "@/components/DeathNoteAnimation";
+import GachaAnimation from "@/components/GachaAnimation";
+import { useGacha } from "@/hooks/useGacha";
 
 interface Question {
   question: string;
@@ -30,6 +32,7 @@ const Quiz = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
+  const { isGachaOpen, earnedRewards, triggerGacha, closeGacha } = useGacha();
   
   const [quiz, setQuiz] = useState<any>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -50,7 +53,7 @@ const Quiz = () => {
           .from('quizzes')
           .select('*, quiz_topics(name, icon)')
           .eq('id', quizId)
-          .single();
+          .maybeSingle();
 
         if (error) throw error;
         
@@ -118,6 +121,9 @@ const Quiz = () => {
       if (error) throw error;
 
       setQuizCompleted(true);
+
+      // Trigger gacha animation
+      await triggerGacha(score, questions.length);
 
       toast({
         title: "Quiz Completed!",
@@ -318,6 +324,12 @@ const Quiz = () => {
           </div>
         </div>
       </div>
+      
+      <GachaAnimation 
+        rewards={earnedRewards}
+        isOpen={isGachaOpen}
+        onClose={closeGacha}
+      />
     </div>
   );
 };

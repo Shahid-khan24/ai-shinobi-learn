@@ -183,6 +183,39 @@ export type Database = {
           },
         ]
       }
+      rewards: {
+        Row: {
+          created_at: string
+          description: string
+          icon: string
+          id: string
+          name: string
+          rarity: string
+          reward_type: string
+          reward_value: Json
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          icon: string
+          id?: string
+          name: string
+          rarity: string
+          reward_type: string
+          reward_value?: Json
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          name?: string
+          rarity?: string
+          reward_type?: string
+          reward_value?: Json
+        }
+        Relationships: []
+      }
       syllabus: {
         Row: {
           created_at: string
@@ -247,6 +280,38 @@ export type Database = {
             columns: ["achievement_id"]
             isOneToOne: false
             referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_rewards: {
+        Row: {
+          earned_at: string
+          id: string
+          is_new: boolean | null
+          reward_id: string
+          user_id: string
+        }
+        Insert: {
+          earned_at?: string
+          id?: string
+          is_new?: boolean | null
+          reward_id: string
+          user_id: string
+        }
+        Update: {
+          earned_at?: string
+          id?: string
+          is_new?: boolean | null
+          reward_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_rewards_reward_id_fkey"
+            columns: ["reward_id"]
+            isOneToOne: false
+            referencedRelation: "rewards"
             referencedColumns: ["id"]
           },
         ]

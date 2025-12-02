@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import UserProfileDialog from "@/components/UserProfileDialog";
+import RewardsDisplay from "@/components/RewardsDisplay";
 
 interface Profile {
   display_name: string;
@@ -293,8 +294,9 @@ const Profile = () => {
 
         {/* Tabs Section */}
         <Tabs defaultValue="achievements" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="achievements">Achievements</TabsTrigger>
+            <TabsTrigger value="rewards">Rewards</TabsTrigger>
             <TabsTrigger value="history">Case History</TabsTrigger>
           </TabsList>
 
@@ -337,6 +339,14 @@ const Profile = () => {
                   );
                 })}
               </div>
+            </Card>
+          </TabsContent>
+
+          {/* Rewards Tab */}
+          <TabsContent value="rewards" className="space-y-6">
+            <Card className="p-6">
+              <h2 className="text-2xl font-bold mb-6">Gacha Collection</h2>
+              <RewardsDisplay />
             </Card>
           </TabsContent>
 

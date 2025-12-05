@@ -13,7 +13,7 @@ import CreateMarketplaceListing from "@/components/CreateMarketplaceListing";
 const Trading = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!user) {

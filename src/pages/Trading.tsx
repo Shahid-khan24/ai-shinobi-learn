@@ -1,21 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Navigation from "@/components/Navigation";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Gift, ArrowLeftRight } from "lucide-react";
+import { Loader2, Gift, ArrowLeftRight, Store } from "lucide-react";
 import TradeOffersList from "@/components/TradeOffersList";
 import CreateTradeOffer from "@/components/CreateTradeOffer";
 import GiftReward from "@/components/GiftReward";
-import { useToast } from "@/hooks/use-toast";
+import MarketplaceListing from "@/components/MarketplaceListing";
+import CreateMarketplaceListing from "@/components/CreateMarketplaceListing";
 
 const Trading = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -49,11 +46,19 @@ const Trading = () => {
             </p>
           </div>
 
-          <Tabs defaultValue="offers" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3">
+          <Tabs defaultValue="marketplace" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-5">
+              <TabsTrigger value="marketplace">
+                <Store className="w-4 h-4 mr-2" />
+                Marketplace
+              </TabsTrigger>
+              <TabsTrigger value="list">
+                <Store className="w-4 h-4 mr-2" />
+                List Item
+              </TabsTrigger>
               <TabsTrigger value="offers">
                 <ArrowLeftRight className="w-4 h-4 mr-2" />
-                Trade Offers
+                Offers
               </TabsTrigger>
               <TabsTrigger value="create">
                 <ArrowLeftRight className="w-4 h-4 mr-2" />
@@ -61,9 +66,17 @@ const Trading = () => {
               </TabsTrigger>
               <TabsTrigger value="gift">
                 <Gift className="w-4 h-4 mr-2" />
-                Send Gift
+                Gift
               </TabsTrigger>
             </TabsList>
+
+            <TabsContent value="marketplace">
+              <MarketplaceListing />
+            </TabsContent>
+
+            <TabsContent value="list">
+              <CreateMarketplaceListing />
+            </TabsContent>
 
             <TabsContent value="offers">
               <TradeOffersList />

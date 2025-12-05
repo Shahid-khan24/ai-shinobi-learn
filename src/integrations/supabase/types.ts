@@ -44,6 +44,44 @@ export type Database = {
         }
         Relationships: []
       }
+      marketplace_listings: {
+        Row: {
+          asking_description: string | null
+          created_at: string
+          id: string
+          status: string
+          updated_at: string
+          user_id: string
+          user_reward_id: string
+        }
+        Insert: {
+          asking_description?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+          user_reward_id: string
+        }
+        Update: {
+          asking_description?: string | null
+          created_at?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          user_reward_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_listings_user_reward_id_fkey"
+            columns: ["user_reward_id"]
+            isOneToOne: false
+            referencedRelation: "user_rewards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -392,6 +430,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_marketplace_listing: {
+        Args: { listing_id: string; offered_reward_id: string }
+        Returns: boolean
+      }
       complete_trade: { Args: { trade_id: string }; Returns: boolean }
       get_overall_leaderboard: {
         Args: { time_period?: string }
